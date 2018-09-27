@@ -31,8 +31,8 @@ class Curler
         $this->init($url);
 
         curl_setopt($this->curl, CURLOPT_POST, 1);
-        curl_setopt($this->curl, CURLOPT_POSTFIELDS,
-                    http_build_query($params));
+        curl_setopt($this->curl, CURLOPT_POST, count($params));
+        curl_setopt($this->curl, CURLOPT_POSTFIELDS, $params);
 
         return $this->execute();
     }
@@ -45,7 +45,12 @@ class Curler
     */
     public function get( string $url, array $params = [] )
     {
-        $this->init($url . '?' . http_build_query($params));
+        if ( count( $params ) )
+        {
+            $url .= "?" . http_build_query($params);
+        }
+
+        $this->init( $url );
 
         return $this->execute();
     }
@@ -59,7 +64,11 @@ class Curler
     public function init( string $url )
     {
         $this->curl = curl_init($url);
-        curl_setopt($$this->curl, CURLOPT_RETURNTRANSFER, true);
+
+        curl_setopt($this->curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17');
+        curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, FALSE);
     }
 
     /**
@@ -71,10 +80,10 @@ class Curler
     protected function execute()
     {
         $resp = curl_exec($this->curl);
-        
+
         $this->closeCurl();
 
-        return json_decode($resp);
+        return $resp;
     }
 
     /**
