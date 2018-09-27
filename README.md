@@ -27,7 +27,7 @@ $data = [
 $response = $curler->post( $url, $data );
 
 //execute a GET request and store response in the variable $response
-$curler->get( $url, $data );
+$response = $curler->get( $url, $data );
 ```
 
 that's it. really.
