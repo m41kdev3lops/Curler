@@ -59,6 +59,7 @@ class Curler
     public function init( string $url )
     {
         $this->curl = curl_init($url);
+        curl_setopt($$this->curl, CURLOPT_RETURNTRANSFER, true);
     }
 
     /**
