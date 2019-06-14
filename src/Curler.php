@@ -20,6 +20,23 @@ class Curler
     protected $curl;
 
 
+    protected $headers;
+
+
+    public function __construct( array $headers = [] )
+    {
+        $this->setHeaders( $headers );
+    }
+
+
+    public function setHeaders( array $headers )
+    {
+        $this->headers = $headers;
+
+        return $this;
+    }
+
+
     /**
      * Execute a post request
      * 
@@ -69,6 +86,9 @@ class Curler
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+
+        if ( ! empty( $this->headers ) )
+            curl_setopt($this->curl, CURLOPT_HTTPHEADER, $this->headers);
     }
 
     /**
